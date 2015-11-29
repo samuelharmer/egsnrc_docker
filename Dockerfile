@@ -20,4 +20,4 @@ RUN echo "source /root/EGSnrc/HEN_HOUSE/scripts/egsnrc_bashrc_additions" >> /etc
 # check if it works, by make of sample project
 RUN cd $EGS_HOME/tutor7pp && make
 
-#to test, after start of image: tutor7pp -i test1 -p /root/EGSnrc/HEN_HOUSE/pegs4/data/tutor_data.pegs4dat 
+#to test, runs this after container start: tutor7pp -i test1 -p /root/EGSnrc/HEN_HOUSE/pegs4/data/tutor_data.pegs4dat 
