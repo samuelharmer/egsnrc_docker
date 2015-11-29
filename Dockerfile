@@ -3,7 +3,7 @@ MAINTAINER Nicolas Renkamp, <nico.re@gmail.com>
 
 # install dependencies
 RUN sudo apt-get -y update
-RUN sudo apt-get -y install gfortran g++ make wish grace git expect expect-dev && sudo apt-get -y autoremove
+RUN sudo apt-get -y install gfortran g++ make wish grace git expect expect-dev qt4-dev-tools zlib1g-dev && sudo apt-get -y autoremove
 RUN cd ~ && git clone https://github.com/nrc-cnrc/EGSnrc.git
 
 # install egsnrc
@@ -19,5 +19,9 @@ RUN echo "source /root/EGSnrc/HEN_HOUSE/scripts/egsnrc_bashrc_additions" >> /etc
 
 # check if it works, by make of sample project
 RUN cd $EGS_HOME/tutor7pp && make
+
+#compile the GUIs which are ported to QT4 already
+RUN cd /root/EGSnrc/HEN_HOUSE/gui/egs_gui && qmake && make
+RUN cd /root/EGSnrc/HEN_HOUSE/gui/egs_inprz && qmake && make
 
 #to test, runs this after container start: tutor7pp -i test1 -p /root/EGSnrc/HEN_HOUSE/pegs4/data/tutor_data.pegs4dat 
