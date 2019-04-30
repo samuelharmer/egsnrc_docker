@@ -43,7 +43,7 @@ if {$force_conservative} {
 
 
 set timeout -1
-spawn /root/EGSnrc/HEN_HOUSE/scripts/configure
+spawn EGSnrc/HEN_HOUSE/scripts/configure
 match_max 100000
 expect -exact ""
 send -- "\r"
