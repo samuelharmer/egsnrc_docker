@@ -1,46 +1,49 @@
 # egsnrc_docker
-Docker Image for EGSnrc
 
-### Manual build
-```
-$ docker build -t "egsnrc_image"
-```
+A Docker image for running [EGSnrc][1] simulations.
 
-### Run from manual build
-```
-$ docker run -it egsnrc_image
-```
+On its own the image is not much use as no user codes have been compiled. Instead it is intended to be used as a base for images containing compiled user codes for specific uses. It is assumed these simulations will be running headlessly (i.e. without a GUI).
 
-### Run from Dockerhub
+## Using the image
+
+We can pull the latest image from [Docker Hub][2] and start a new container based on it in a single step.
 ```
-$ docker run -it nicornk/egsnrc_docker
-$ # to test egsnrc, runs this after container start: 
-$ tutor7pp -i test1 -p /root/EGSnrc/HEN_HOUSE/pegs4/data/tutor_data.pegs4dat 
+$ docker run -it samuelharmer/egsnrc
+root@ec13bbaf593e:~# exit
 ```
 
-### Run with support for X11 on OS X
-To enable X11 support for this docker image on OS X, follow these steps (homebrew required, adapted from [this link](https://github.com/docker/docker/issues/8710)). 
-
+Or we can use a specific version of EGSnrc.
 ```
-$ brew install socat
-$ brew cask install xquartz
-$ open -a XQuartz
-```
-In the Quartz shell execute `echo $DISPLAY`. Copy the output. Open a new shell and run the following commands:
-
-```
-$ DISPLAY=<#VALUE_FROM_above e.g. /private/tmp/.../$ org.macosforge.xquartz:0>
-$ export DISPLAY
-$ socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"  
+$ docker run -it samuelharmer/egsnrc:v2018
+root@dc8189614e92:~# 
 ```
 
-Keep this shell open. Open a new shell window and run `ifconfig`, copy the ip address of `vboxnet0` (e.g. 192.168.99.1).
-Now you can start the container, replace placeholder with ip address.
+From within a container we can now test it by making the *tutor7pp* user code, and running it.
+```
+root@4ec00661c701:~# make -C $EGS_HOME/tutor7pp
+root@4ec00661c701:~# tutor7pp -i test1 -p $HEN_HOUSE/pegs4/data/tutor_data.pegs4dat
+```
 
+
+## Building the image
+
+We can build this image ourselves locally.
 ```
-$ docker run -it -e DISPLAY=<IP_ADDRESS>:0 nicornk/egsnrc_docker
-$ # start egs_gui in container:
-$ $HEN_HOUSE/bin/egs_gui
-$ # start egs_inprz
-$ $HEN_HOUSE/bin/egs_inprz
+$ docker build -t egsnrc
 ```
+
+Assuming the build succeeded, we now want to tag this ready for pushing to [Docker Hub][2].
+```
+$ docker tag egsnrc samuelharmer/egsnrc
+$ docker tag egsnrc samuelharmer/egsnrc:v2018
+```
+
+Now we can login to [Docker Hub][2], and upload the new image.
+```
+$ docker login -u samuelharmer
+$ docker push samuelharmer/egsnrc
+```
+
+[1]: https://github.com/nrc-cnrc/EGSnrc
+[2]: https://hub.docker.com/r/samuelharmer/egsnrc
+

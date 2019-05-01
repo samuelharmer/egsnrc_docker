@@ -31,10 +31,3 @@ ENV EGS_HOME   $HOME/EGSnrc/egs_home/
 ENV EGS_CONFIG $HOME/EGSnrc/HEN_HOUSE/specs/linux.conf
 RUN echo "source $HOME/EGSnrc/HEN_HOUSE/scripts/egsnrc_bashrc_additions" >> /etc/bash.bashrc
 
-
-# Check we can build a module
-# RUN cd $EGS_HOME/tutor7pp && make
-
-# Check we can run the module in a container
-# tutor7pp -i test1 -p $HOME/EGSnrc/HEN_HOUSE/pegs4/data/tutor_data.pegs4dat 
-
